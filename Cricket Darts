@@ -1,0 +1,10 @@
+=LET(sc,TOROW({15;16;17;18;19;20;25}),ds,G182:CR182,sq,SEQUENCE(COUNTA(ds)),
+mul,LAMBDA(pl,REDUCE(sc*0-3,sq,LAMBDA(a,n,LET(d,INDEX(ds,n),m,SWITCH(LEFT(d),"T",3,"D","2","B",2,1),p,IFERROR(IFERROR(--d,--MID(d,2,2)),25),
+VSTACK(a,TAKE(a,-1)+(sc=p)*m*(MOD(INT((n-1)/3),2)+1=pl)))))),
+ma,mul(1),mb,mul(2),
+Po,LAMBDA(pa,pb,x,SCAN(0,sq,LAMBDA(a,n,LET(xa,INDEX(pa,n,),xb,INDEX(pa,n+1,)-IF(xa>0,xa,0),SUM(a,(xb>0)*xb*sc*(INDEX(pb,n+x,)<0)))))),
+Pab,HSTACK(Po(ma,mb,0),Po(mb,ma,1)),
+et,IFNA(XMATCH({1;2},BYROW(ma,LAMBDA(x,MIN(x)>=0))+BYROW(mb,LAMBDA(x,MIN(x)>=0)))-1,MAX(sq)),
+W,MAP(et,LAMBDA(n,XMATCH(9^9,INDEX(Pab,n,),-1))),
+wp,INDEX(Pab,,@INDEX(W,2)),
+IFNA(INDEX(Pab,MIN(et),MODE(W)),XLOOKUP(INDEX(Pab,@et,@W),wp,wp,,1)))
